@@ -55,19 +55,21 @@ h2{font:900 24px system-ui,sans-serif;margin:2px 0 8px;font-style:italic;letter-
 #rPlace{font:900 54px system-ui;font-style:italic;line-height:1}
 #rStats{font-size:14px;color:#d8dde8;margin:8px 0;line-height:1.6}
 #ctl{position:fixed;inset:0;z-index:3;pointer-events:none}
-#steer{position:absolute;left:0;top:64px;bottom:0;width:52%;pointer-events:auto;touch-action:none}
-#steerHint{position:absolute;left:18px;bottom:calc(18px + env(safe-area-inset-bottom));font:800 11px system-ui;letter-spacing:.12em;color:rgba(255,255,255,.55);pointer-events:none}
+#steer{position:absolute;left:0;right:0;top:64px;bottom:0;pointer-events:auto;touch-action:none}
+#steerHint{position:absolute;left:0;right:0;text-align:center;bottom:calc(130px + env(safe-area-inset-bottom));font:800 11px system-ui;letter-spacing:.12em;color:rgba(255,255,255,.55);pointer-events:none}
 #knobBase,#knob{position:absolute;pointer-events:none;display:none;transform:translate(-50%,-50%)}
 #knobBase{width:150px;height:26px;border-radius:13px;background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.28)}
 #knob{width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.32);border:2px solid rgba(255,255,255,.7)}
 .cb{position:absolute;pointer-events:auto;touch-action:none;border-radius:50%;padding:0;margin:0;font:900 13px system-ui;color:#fff;border:3px solid rgba(255,255,255,.35);background:rgba(20,26,40,.55);min-height:0}
-#bH{width:108px;height:108px;right:calc(14px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom));background:rgba(225,115,0,.62);font-size:16px}
+#bH{width:104px;height:104px;right:calc(122px + env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));background:rgba(225,115,0,.62);font-size:16px}
 #bH.target{background:rgba(255,140,0,.92);border-color:#fff3c4;box-shadow:0 0 22px rgba(255,170,40,.9);animation:pulse .5s infinite alternate}
 @keyframes pulse{to{transform:scale(1.06)}}
-#bN{width:80px;height:80px;right:calc(26px + env(safe-area-inset-right));bottom:calc(134px + env(safe-area-inset-bottom));background:rgba(0,110,170,.4)}
-#bB{width:70px;height:70px;right:calc(134px + env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom));background:rgba(170,30,30,.5);font-size:11px}
-.arw{position:absolute;bottom:calc(16px + env(safe-area-inset-bottom));width:92px;height:92px;border-radius:50%;border:3px solid rgba(255,255,255,.35);background:rgba(20,26,40,.45);display:flex;align-items:center;justify-content:center;font:900 34px system-ui;color:rgba(255,255,255,.85);pointer-events:none}
-#arL{left:calc(14px + env(safe-area-inset-left))}#arR{left:calc(124px + env(safe-area-inset-left))}
+#bN{width:80px;height:80px;left:calc(22px + env(safe-area-inset-left));bottom:calc(126px + env(safe-area-inset-bottom));background:rgba(0,110,170,.4)}
+#bB{width:72px;height:72px;left:calc(122px + env(safe-area-inset-left));bottom:calc(20px + env(safe-area-inset-bottom));background:rgba(170,30,30,.5);font-size:11px}
+.arw{position:absolute;bottom:calc(14px + env(safe-area-inset-bottom));width:96px;height:96px;border-radius:50%;border:3px solid rgba(255,255,255,.35);background:rgba(20,26,40,.45);display:flex;align-items:center;justify-content:center;font:900 34px system-ui;color:rgba(255,255,255,.85);pointer-events:none}
+#arL{left:calc(14px + env(safe-area-inset-left))}#arR{right:calc(14px + env(safe-area-inset-right))}
+@media (max-width:500px){.arw{width:84px;height:84px}#bB{width:62px;height:62px;left:calc(108px + env(safe-area-inset-left));bottom:calc(24px + env(safe-area-inset-bottom))}
+#bH{width:96px;height:96px;right:calc(14px + env(safe-area-inset-right));bottom:calc(112px + env(safe-area-inset-bottom))}#bN{left:calc(16px + env(safe-area-inset-left));bottom:calc(112px + env(safe-area-inset-bottom))}#steerHint{bottom:calc(220px + env(safe-area-inset-bottom))}}
 .arw.on{background:rgba(255,255,255,.35);transform:scale(.93)}
 .opt{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;margin:8px 0;font-size:13px;color:#cfd6e4}
 .opt b{display:block;color:#fff;font-size:14px}
@@ -765,7 +767,7 @@ function hud(g){
 const IN={steer:0,sm:0,brake:false,hitQ:false,nitroQ:false,keys:{},tilt:0,tilt0:null};
 const st={id:null,ox:0,oy:0,v:0,ptr:{}};
 const steerEl=$('steer'),knob=$('knob'),kb=$('knobBase'),arL=$('arL'),arR=$('arR');
-function padSteer(){let v=0;const r=steerEl.getBoundingClientRect(),mid=r.left+r.width*.5;for(const k in st.ptr)v+=st.ptr[k]<mid?-1:1;st.v=clamp(v,-1,1);arL.classList.toggle('on',st.v<0);arR.classList.toggle('on',st.v>0);}
+function padSteer(){let v=0;const mid=innerWidth/2;for(const k in st.ptr)v+=st.ptr[k]<mid?-1:1;st.v=clamp(v,-1,1);arL.classList.toggle('on',st.v<0);arR.classList.toggle('on',st.v>0);}
 steerEl.addEventListener('pointerdown',e=>{e.preventDefault();auInit();try{steerEl.setPointerCapture(e.pointerId);}catch(_){}$('steerHint').style.display='none';
   if(S.ctl==='buttons'){st.ptr[e.pointerId]=e.clientX;padSteer();return;}
   if(S.ctl!=='swipe')return;
@@ -797,7 +799,7 @@ function readInput(){const K=IN.keys,ks=(K.arrowright||K.d?1:0)-(K.arrowleft||K.
   const i={steer:IN.sm,brake:IN.brake||K.arrowdown||K.s,hit:IN.hitQ||(S.autoHit&&G.P.hitCd<=0&&inReach(G)),nitro:IN.nitroQ,assist:S.assist};IN.hitQ=IN.nitroQ=false;return i;}
 function applyCtl(){const b=S.ctl==='buttons';arL.style.display=arR.style.display=b?'flex':'none';
   $('steerHint').textContent=b?'':S.ctl==='tilt'?'TILT TO STEER':'DRAG TO STEER';
-  $('iHelp').innerHTML=(b?'Steering: hold the left or right side of the left half of the screen.':S.ctl==='tilt'?'Steering: tilt the phone. Hold it how you like at the start; that becomes centre.':'Steering: drag anywhere on the left half; it follows your thumb.')+(S.assist?' Assist is on.':'')+'<br>Keyboard: arrows steer, Down brake, Space hit, Shift nitro, P pause.';
+  $('iHelp').innerHTML=(b?'Steering: hold the left half of the screen to go left, the right half to go right (the arrows mark each side). Left thumb: BRAKE and NITRO. Right thumb: HIT.':S.ctl==='tilt'?'Steering: tilt the phone. Hold it how you like at the start; that becomes centre.':'Steering: drag left or right anywhere on the screen; it follows your thumb.')+(S.assist?' Assist is on.':'')+'<br>Keyboard: arrows steer, Down brake, Space hit, Shift nitro, P pause.';
   for(const[id,v]of[['oSteer',S.ctl],['oAssist',S.assist?'1':'0'],['oAuto',S.autoHit?'1':'0']])document.querySelectorAll('#'+id+' button').forEach(x=>x.classList.toggle('sel',x.dataset.v===v));
   $('oSteerD').textContent=b?' Two big tap zones (easiest)':S.ctl==='tilt'?' Tilt the phone like a wheel':' Drag your thumb left or right';}
 document.querySelectorAll('#oSteer button').forEach(x=>x.onclick=()=>{S.ctl=x.dataset.v;if(S.ctl==='tilt')askTilt();IN.tilt0=null;save();applyCtl();});
